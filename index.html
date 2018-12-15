@@ -65,59 +65,46 @@
         <h1>Neural population dynamics</h1>
         <div class="row">
           <div class="col-md-4"></div>
-          <p class="lead col-md-4"></p>
+          <p class="lead col-md-4">Visualize how three neurons' PSTHs look in population space.</p>
+          <p style="text-align: left;">
+            Each neuron's time-varying firing rate in response to a stimulus θ is modeled as: 
+            <img src="static/eqn.png" height="35"/>
+            <br>The idea is that f(t,τ) is a stimulus-evoked gain signal that ramps up from 0 to 1 (with time constant τ) when the stimulus comes on. Each neuron is assumed to be cosine-tuned, where the preferred stimuli of the three neurons are 45º, 135º, and 180º, respectively.
+          </p>
         </div>
-        <div id="graph"></div>
-        <div class="container">
-        	<!-- <div class="row">
-    				<div class="btn-toolbar" role="toolbar" aria-label="button groups">
-	            	<div class="btn-group mr-2" role="group" aria-label="Second group">
-	              		<button id="make-psths" type="button" class="btn btn-success btn-md">Create PSTHs</button>
-	            	</div>
-	    		   </div>
-	    	  </div> -->
+        <!-- r(t, \theta \mid \theta_{pref}) = \left[ r_{spont} +  f(t, \tau)\left(r_{evoked} + r_{stim} \cos(\theta - \theta_{\mbox{pref}})\right) \right]^+ -->
       	<div class="container">
-	      <div class="row">
-	        <div class="col-md-2"></div>
-	        <div class="col-md-8 text-justify">
-	        	<div id="sketch-holder"></div>
-	        </div>
-	      </div>
-	    <br>
         <div class="row">
     			<div class="btn-toolbar" role="toolbar" aria-label="button groups">
 	            	<div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
 		                <div class="slider-container">
-		                Spontaneous rate <input type="range" min="0" max="9" value="0" class="slider" id="slider-a">
+		                r_spont <input type="range" min="0" max="9" value="0" class="slider" id="slider-a">
 		                </div>
-	            	</div>
-	            	<div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
-		                <div class="slider-container">
-		                Avg. evoked rate <input type="range" min="0" max="9" value="0" class="slider" id="slider-b">
-		                </div>
-	            	</div>
-	            	<div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
-		                <div class="slider-container">
-		                Evoked tau <input type="range" min="0" max="9" value="0" class="slider" id="slider-tau">
-		                </div>
-	            	</div>
+                </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
-                    CI rate <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci">
+                    τ <input type="range" min="1" max="9" value="0" class="slider" id="slider-tau">
                     </div>
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
-                    CI tau <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci-tau">
+                    r_evoked <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci">
+                    </div>
+                </div>
+                <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+                    <div class="slider-container">
+                    r_stim <input type="range" min="0" max="9" value="0" class="slider" id="slider-b">
                     </div>
                 </div>
 	            </div>
-	           </div>
-      		</div>
+         </div>
+         <div class="row">
+          <div id="graph"></div>
+         </div>
+    		</div>
       	<br>
-    	<p></p>
-      </div>
       <hr>
+    </div>
     </div>
   </body>
 </html>

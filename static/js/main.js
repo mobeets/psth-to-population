@@ -11,9 +11,8 @@ var layout = [];
 var a = 5; // spontaneous firing rate
 var b = 3; // average evoked firing rate
 var tau = 2; // time constant of stimulus onset
-var t0 = 1; // time of stimulus onset
+var t0 = 2; // time of stimulus onset
 var ciRate = 0; // CI rate
-var ciTau = 1; // time constant of CI
 
 function g(t,tau) { // evoked input gate
   // t is current time
@@ -32,7 +31,7 @@ function psth(t,x,s,g,h,a,b,t0,tau) { // firing rate
   // firing rate of neuron with preferred stimulus s
   //  at time t, given current stimulus x
   // y = max(0, a + b*g(t-t0)*b*h(x,s))
-  return Math.max(0, a + b*g(t-t0,tau)*h(x,s) + ciRate*g(t-t0,ciTau));
+  return Math.max(0, a + g(t-t0,tau)*(b*h(x,s) + ciRate));
 }
 
 function rad2deg(rad) {
@@ -41,8 +40,8 @@ function rad2deg(rad) {
 
 function make3Psths(stimuli, nTimesteps, returnLines) {
   var sx = Math.PI/4;
-  var sy = Math.PI;
-  var sz = 3*Math.PI/4;
+  var sy = 3*Math.PI/4;
+  var sz = Math.PI;
   var lines = [];
   var xss = [];
   var yss = [];
@@ -104,16 +103,11 @@ function changeCiRate() {
   ciRate = parseInt($("#slider-ci").val());
   updateGraph();
 }
-function changeCiTau() {
-  ciTau = parseInt($("#slider-ci-tau").val());
-  updateGraph();
-}
 function addHandlers() {
   $("#slider-a").click(changeA);
   $("#slider-b").click(changeB);
   $("#slider-tau").click(changeTau);
   $("#slider-ci").click(changeCiRate);
-  $("#slider-ci-tau").click(changeCiTau);
   $("#make-psths").click(updateGraph);
 }
 
