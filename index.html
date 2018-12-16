@@ -12,7 +12,7 @@
     <meta name="description" content="simulate transition between swarming and flocking">
     <meta name="author" content="mobeets">
     <link rel="icon" href="static/favicon.ico">
-    <title>Neural population dynamics</title>
+    <title>Visualizing neural populations</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
@@ -44,12 +44,12 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="https://mobeets.github.io">mobeets</a>
-          <p class="navbar-text">Neural population dynamics</p>
+          <p class="navbar-text">Visualizing neural populations</p>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://github.com/mobeets/boids-and-bugs"><i class="fa fa-github" aria-hidden="true"></i> View on Github</a></li>
+            <li><a href="https://github.com/mobeets/psth-to-population"><i class="fa fa-github" aria-hidden="true"></i> View on Github</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -62,27 +62,49 @@
     </nav> -->
     <div class="container">
       <div class="main-container">
-        <h1>Neural population dynamics</h1>
+        <h1>Neural population activity</h1>
         <div class="row">
           <div class="col-md-4"></div>
           <p class="lead col-md-4">Visualize the time-varying activity of three neurons in population space.</p>
         </div>
         <div class="row">
+          <h3>From PSTH to Population</h3>
           <p style="text-align: left;">
-            Below, each neuron's time-varying firing rate (or PSTH) in response to a stimulus θ is modeled as: 
-            <img src="static/eqns2.png" height="50"/>
-            <br>The idea is that when a stimulus (θ) is shown, a neuron's firing rate gradually increases from spontaneous firing (r_spont) to evoked firing (r_evoked). The evoked firing has two components: a generic, untuned response (r_generic), and a cosine-tuned response (r_stim). Above, g_τ1(t) and g_τ1(t) are gain terms that ramp up from 0 to 1, so that τ_1 and τ_2 control how quickly the firing rate responds to the stimulus. The preferred stimulus (θ_pref) for each of the three neurons is 45º, 135º, and 180º, respectively. Just by varying the parameters below, you can get a variety of different geometries in terms of how the population activity evolves as a whole.
-            <!-- 1. Plot the three PSTHs -->
-            <!-- 2. Control the three PDs -->
+            Traditionally, when we want to assess how a single neuron responds to a stimulus, we can plot its PSTH, or its average firing rate over time. However, neurons don't act in isolation, so it's important to think about how these PSTHs look across a population of multiple neurons. One way to view this so-called "population activity" is to plot the firing rate of each neuron on its own axis. (If you have more than three neurons, you could first apply a dimensionality reduction technique like PCA and plot the activity of the first three prinicipal components.)
+          </p>
+          <p style="text-align: left;">
+            Visualizing population activity can reveal interesting geometries that aren't obvious just from the PSTHs of the individual neurons. You can play around with the parameters of three neurons' PSTHs below and see how the resulting population picture changes. Or click the following words to make the activity look like a <span id="snowflake" class="psth-preset">snowflake</span>, a <span id="spider" class="psth-preset">spider</span>, a <span id="gramophone" class="psth-preset">gramophone</span>, a <span id="head-massager" class="psth-preset">head massager</span>. (And make sure to click and drag the 3D plot to change the perspective.) An explanation of the parameters is at the bottom of the page.
           </p>
         </div>
         <!-- r(t, \theta) &= \max\left[0, r_{spont} +  r_{evoked}(t, \theta) \right]\\
 r_{evoked}(t, \theta) &= g_{\tau_1}(t)*r_{generic} + g_{\tau_2}(t)*r_{stim}*\cos(\theta - \theta_{pref}) -->
       	<div class="container">
         <div class="row">
-          <div id="graph"></div>
-          <!-- <div id="psths"></div> -->
+          <!-- <div id="graph"></div> -->
+          <div id="psths"></div>
         </div>
+        <div class="row">
+          <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+            <div class="slider-container">
+                θ_pref, Neuron 1 <input type="range" min="0" max="7" value="0" class="slider" id="slider-thetapref-1">
+            </div>
+          </div>
+          <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+            <div class="slider-container">
+                θ_pref, Neuron 2 <input type="range" min="0" max="7" value="0" class="slider" id="slider-thetapref-2">
+            </div>
+          </div>
+          <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+            <div class="slider-container">
+                θ_pref, Neuron 3 <input type="range" min="0" max="7" value="0" class="slider" id="slider-thetapref-3">
+            </div>
+          </div>
+          <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+            <div class="slider-container">
+                Stimulus view <input type="range" min="0" max="7" value="0" class="slider" id="slider-stim-index">
+            </div>
+          </div>
+         </div>
         <div class="row">
     			<div class="btn-toolbar" role="toolbar" aria-label="button groups">
 	            	<div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
@@ -97,7 +119,7 @@ r_{evoked}(t, \theta) &= g_{\tau_1}(t)*r_{generic} + g_{\tau_2}(t)*r_{stim}*\cos
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
-                    τ_1 <input type="range" min="0" max="10" value="0" class="slider" id="slider-ci-tau">
+                    τ_1 <input type="range" min="1" max="12" value="1" class="slider" id="slider-ci-tau">
                     </div>
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
@@ -107,15 +129,30 @@ r_{evoked}(t, \theta) &= g_{\tau_1}(t)*r_{generic} + g_{\tau_2}(t)*r_{stim}*\cos
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
-                    τ_2 <input type="range" min="1" max="10" value="0" class="slider" id="slider-tau">
+                    τ_2 <input type="range" min="1" max="12" value="1" class="slider" id="slider-tau">
                     </div>
                 </div>
 	            </div>
          </div>
          <div class="row">
-          <!-- <div id="graph"></div> -->
-          <div id="psths"></div>
-         </div>
+          <div id="graph"></div>
+          <!-- <div id="psths"></div> -->
+        </div>
+        <div class="row">
+          <h3>Modeling assumptions</h3>
+          <p style="text-align: left;">
+            Above, each neuron's time-varying firing rate (or PSTH) in response to a stimulus θ is modeled as: 
+          </p>
+          <p style="text-align: left;">
+            <img src="static/eqns2.png" height="50"/>
+          </p>
+          <p style="text-align: left;">
+            The idea is that when a stimulus (θ) is shown, a neuron's firing rate gradually increases from spontaneous firing (r_spont) to evoked firing (r_evoked). The evoked firing has two components: a generic, untuned response (r_generic), and a cosine-tuned response (r_stim). Above, g_τ1(t) and g_τ1(t) are gain terms that ramp up from 0 to 1, so that τ_1 and τ_2 control how quickly the firing rate responds to the stimulus.
+          </p>
+          <p style="text-align: left;">
+            Each neuron has its own preferred stimulus (θ_pref): <span id="stimpref1">45</span>º, <span id="stimpref2">135</span>º, and <span id="stimpref3">180</span>º, respectively. You can change these preferred stimuli as well as the other PSTH parameters with the controls above.
+          </p>
+        </div>
     		</div>
       	<br>
       <hr>
