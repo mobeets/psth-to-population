@@ -1,6 +1,9 @@
 body {
   font-family: 'Raleway', sans-serif;
 }
+h3 {
+    text-align: left;
+}
 .main-container {
   padding: 3rem 1.5rem;
   text-align: center;
@@ -11,16 +14,6 @@ body {
     cursor: pointer;
 }
 
-/*#drums-toggle {
-	background: #ccc;
-	cursor: pointer;
-	border-top: solid 2px #eaeaea;
-	border-left: solid 2px #eaeaea;
-	border-bottom: solid 2px #777;
-	border-right: solid 2px #777;
-	padding: 5px 5px;       
-	}
-*/
 .inst-toggle {
 	background-color: white;
 	color: black;
@@ -45,6 +38,12 @@ input[type=range] {
 	/*margin-left: 20px;*/
 }
 
+.btn-metagroup {
+    -webkit-border-radius: 20;
+    -moz-border-radius: 20;
+    border-radius: 20px;
+    /*background-color: #edf4fc;*/
+}
 
 .btn-group {
     margin-right: 1em;
@@ -61,12 +60,18 @@ input[type=range] {
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
-    font-weight: 400;
+    /*font-weight: 400;*/
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    background-color: gray;
-    color: white;
+    /*background-color: #edf4fc;*/
+    /*color: white;*/
+}
+.btn-preset {
+    font-size: 0.8em;
+    border: black;
+    border-style: dotted;
+    border-width: thin;
 }
 
 .slider-container {

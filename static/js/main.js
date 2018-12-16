@@ -148,12 +148,15 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
                 x: 2, y: 2, z: 0.1 }
         }
     },
-    height: 640,
+    height: 600,
+    // width: 600,
   };
   psth_layout = {
     title: 'PSTHs for ' + rad2deg(stimuli[stimIndexForPsth]).toString() + 'º',
     xaxis: {title: 'Time (t)'},
-    yaxis: {title: 'Firing rate (r)'}
+    yaxis: {title: 'Firing rate (r)'},
+    height: 300,
+    width: 500,
   };
   return {graph_lines: lines,
     psth_lines: psth_obj.psth_lines,
@@ -167,6 +170,7 @@ function updateGraphs() {
   var newdata = make3Psths(stimuli, nTimesteps);
   Plotly.update('graph', newdata.graph_update, newdata.graph_layout);
   Plotly.update('psths', newdata.psth_update, newdata.psth_layout);
+  updateSliderValues();
 }
 
 function createGraphs() {
@@ -184,7 +188,7 @@ function makeStimuli(nStimuli) {
 }
 
 function changeA() {
-  a = parseInt($("#slider-a").val());
+  a = parseInt($("#slider-a").val());  
   updateGraphs();
 }
 function changeB() {
@@ -200,7 +204,7 @@ function changeCiRate() {
   updateGraphs();
 }
 function changeCiTau() {
-  ciTau = parseFloat($("#slider-ci-tau").val())/3.0;
+  ciTau = parseFloat($("#slider-ci-tau").val())/3.0;  
   updateGraphs();
 }
 function changeStimIndex() {
@@ -219,6 +223,29 @@ function changeStimPref3() {
   stimPref3 = parseFloat($("#slider-thetapref-3").val());
   updateGraphs();
 }
+
+function updateSliderValues() {
+  $('#slider-a').val(a);
+  $('#slider-b').val(b);
+  $("#slider-tau").val(tau*3);
+  $("#slider-ci").val(ciRate);
+  $("#slider-ci-tau").val(ciTau*3);
+  $("#slider-stim-index").val(stimIndexForPsth);
+  $("#slider-thetapref-1").val(stimPref1);
+  $("#slider-thetapref-2").val(stimPref2);
+  $("#slider-thetapref-3").val(stimPref3);
+
+  $('#value-r-spont').html(a);
+  $('#value-r-stim').html(b);
+  $('#value-tau-stim').html(tau.toFixed(2));
+  $('#value-r-generic').html(ciRate);
+  $('#value-tau-generic').html(ciTau.toFixed(2));
+  $('#value-stim-index').html(rad2deg(stimuli[stimIndexForPsth]).toString() + 'º');
+  $('#value-thetapref-1').html(rad2deg(stimuli[stimPref1]).toString() + 'º');
+  $('#value-thetapref-2').html(rad2deg(stimuli[stimPref2]).toString() + 'º');
+  $('#value-thetapref-3').html(rad2deg(stimuli[stimPref3]).toString() + 'º');
+}
+
 function makeSnowflake() {
   stimPref1 = 0;
   stimPref2 = 3;
@@ -274,16 +301,17 @@ function addHandlers() {
   $("#slider-thetapref-1").click(changeStimPref1);
   $("#slider-thetapref-2").click(changeStimPref2);
   $("#slider-thetapref-3").click(changeStimPref3);
-  $("#snowflake").click(makeSnowflake);
-  $("#gramophone").click(makeGramophone);
-  $("#head-massager").click(makeHeadMassager);
-  $("#spider").click(makeSpider);
+  $(".snowflake").click(makeSnowflake);
+  $(".gramophone").click(makeGramophone);
+  $(".head-massager").click(makeHeadMassager);
+  $(".spider").click(makeSpider);
 }
 
 function main() {
   makeStimuli(nStimuli);
   addHandlers();
   createGraphs();
+  updateSliderValues();
 }
 
 $(document).ready(main);
