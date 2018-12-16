@@ -146,7 +146,7 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
       zaxis: {title: 'Neuron 3'},
       camera: {
           eye: { 
-                x: 2, y: 2, z: 0.1 }
+                x: 1.5, y: 1.5, z: 0.02 }
         },
       margin: {
         l: 0,
@@ -160,7 +160,7 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
     // width: 600,
   };
   psth_layout = {
-    title: 'PSTHs for ' + rad2deg(stimuli[stimIndexForPsth]).toString() + 'º',
+    title: 'Individual neuron PSTHs for ' + rad2deg(stimuli[stimIndexForPsth]).toString() + 'º',
     font: {size: 10},
     xaxis: {title: 'Time (t)'},
     yaxis: {title: 'Firing rate (r)'},
