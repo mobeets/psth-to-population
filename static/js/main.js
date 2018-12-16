@@ -139,6 +139,7 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
   }
   graph_layout = {
     title: 'Population activity',
+    font: {size: 10},
     scene: {
       xaxis: {title: 'Neuron 1'},
       yaxis: {title: 'Neuron 2'},
@@ -146,17 +147,27 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
       camera: {
           eye: { 
                 x: 2, y: 2, z: 0.1 }
-        }
+        },
+      margin: {
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 0
+      },
     },
-    height: 600,
+    height: 400,
+    // legend: {"orientation": "h"}
     // width: 600,
   };
   psth_layout = {
     title: 'PSTHs for ' + rad2deg(stimuli[stimIndexForPsth]).toString() + 'º',
+    font: {size: 10},
     xaxis: {title: 'Time (t)'},
     yaxis: {title: 'Firing rate (r)'},
     height: 300,
-    width: 500,
+    width: 400,
+    // legend: {"orientation": "h"}
+    // width: 500,
   };
   return {graph_lines: lines,
     psth_lines: psth_obj.psth_lines,
