@@ -70,8 +70,10 @@
         <div class="row">
           <p style="text-align: left;">
             Below, each neuron's time-varying firing rate (or PSTH) in response to a stimulus θ is modeled as: 
-            <img src="static/eqns.png" height="50"/>
-            <br>The idea is that when a stimulus (θ) is shown, a neuron's firing rate gradually increases from spontaneous firing (r_spont) to evoked firing (r_evoked). Above, f_τ(t) is a gain signal that ramps up from 0 to 1, so that τ controls how quickly the firing rate responds to the stimulus. Each neuron has a generic response to the presence of a stimulus (r_generic), regardless of which stimulus it is. The other component of the neuron's response is cosine-tuned, where the preferred stimulus (θ_pref) for each of three neurons is 45º, 135º, and 180º, respectively.
+            <img src="static/eqns2.png" height="50"/>
+            <br>The idea is that when a stimulus (θ) is shown, a neuron's firing rate gradually increases from spontaneous firing (r_spont) to evoked firing (r_evoked). The evoked firing has two components: a generic, untuned response (r_generic), and a cosine-tuned response (r_stim). Above, g_τ1(t) and g_τ1(t) are gain terms that ramp up from 0 to 1, so that τ_1 and τ_2 control how quickly the firing rate responds to the stimulus. The preferred stimulus (θ_pref) for each of the three neurons is 45º, 135º, and 180º, respectively. Just by varying the parameters below, you can get a variety of different geometries in terms of how the population activity evolves as a whole.
+            <!-- 1. Plot the three PSTHs -->
+            <!-- 2. Control the three PDs -->
           </p>
         </div>
         <!-- r(t, \theta \mid \theta_{pref}) = \left[ r_{spont} +  f(t, \tau)\left(r_{evoked} + r_{stim} \cos(\theta - \theta_{\mbox{pref}})\right) \right]^+ -->
@@ -87,17 +89,22 @@ r_{evoked}(\theta) = r_{generic} + r_{stim} \cos(\theta - \theta_{pref}) -->
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
-                    τ <input type="range" min="1" max="9" value="0" class="slider" id="slider-tau">
-                    </div>
-                </div>
-                <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
-                    <div class="slider-container">
                     r_generic <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci">
                     </div>
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
+                    τ_1 <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci-tau">
+                    </div>
+                </div>
+                <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+                    <div class="slider-container">
                     r_stim <input type="range" min="0" max="9" value="0" class="slider" id="slider-b">
+                    </div>
+                </div>
+                <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+                    <div class="slider-container">
+                    τ_2 <input type="range" min="1" max="9" value="0" class="slider" id="slider-tau">
                     </div>
                 </div>
 	            </div>

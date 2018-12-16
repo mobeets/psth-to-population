@@ -10,9 +10,10 @@ var layout = [];
 // global parameters:
 var a = 5; // spontaneous firing rate
 var b = 3; // average evoked firing rate
-var tau = 2; // time constant of stimulus onset
 var t0 = 2; // time of stimulus onset
-var ciRate = 0; // CI rate
+var tau = 2; // tau for stimulus response
+var ciRate = 0; // rate for CI
+var ciTau = 1; // tau for CI
 
 function g(t,tau) { // evoked input gate
   // t is current time
@@ -27,11 +28,12 @@ function tuningFcn(x,s) { // tuning function
   // s is preferred stimulus
   return Math.cos(x-s);
 }
-function psth(t,x,s,g,h,a,b,t0,tau) { // firing rate
+function psth(t,x,s,g,h) { // firing rate
   // firing rate of neuron with preferred stimulus s
   //  at time t, given current stimulus x
   // y = max(0, a + b*g(t-t0)*b*h(x,s))
-  return Math.max(0, a + g(t-t0,tau)*(b*h(x,s) + ciRate));
+  // return Math.max(0, a + g(t-t0,tau)*(b*h(x,s) + ciRate));
+  return Math.max(0, a + g(t-t0,tau)*b*h(x,s) + g(t-t0,ciTau)*ciRate);
 }
 
 function rad2deg(rad) {
@@ -52,9 +54,9 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
     var ys = [];
     var zs = [];
     for (var t=0; t<nTimesteps; t++) {
-      xs.push(psth(t,stim,sx,g,tuningFcn,a,b,t0,tau));
-      ys.push(psth(t,stim,sy,g,tuningFcn,a,b,t0,tau));
-      zs.push(psth(t,stim,sz,g,tuningFcn,a,b,t0,tau));
+      xs.push(psth(t,stim,sx,g,tuningFcn));
+      ys.push(psth(t,stim,sy,g,tuningFcn));
+      zs.push(psth(t,stim,sz,g,tuningFcn));
     }
     var cdata = {
       name: rad2deg(stim).toString() + 'º',
@@ -103,11 +105,16 @@ function changeCiRate() {
   ciRate = parseInt($("#slider-ci").val());
   updateGraph();
 }
+function changeCiTau() {
+  ciTau = parseInt($("#slider-ci-tau").val());
+  updateGraph();
+}
 function addHandlers() {
   $("#slider-a").click(changeA);
   $("#slider-b").click(changeB);
   $("#slider-tau").click(changeTau);
   $("#slider-ci").click(changeCiRate);
+  $("#slider-ci-tau").click(changeCiTau);
   $("#make-psths").click(updateGraph);
 }
 
