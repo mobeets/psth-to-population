@@ -65,16 +65,18 @@
         <h1>Neural population dynamics</h1>
         <div class="row">
           <div class="col-md-4"></div>
-          <p class="lead col-md-4">Visualize how the activity of three neurons looks in population space.</p>
+          <p class="lead col-md-4">Visualize the time-varying activity of three neurons in population space.</p>
         </div>
         <div class="row">
           <p style="text-align: left;">
-            Each neuron's time-varying firing rate (or PSTH) in response to a stimulus θ is modeled as: 
-            <img src="static/eqn.png" height="35"/>
-            <br>The idea is that f(t,τ) is a stimulus-evoked gain signal that ramps up from 0 to 1 (with time constant τ) when the stimulus comes on. Each neuron is assumed to be cosine-tuned, where the preferred stimuli of the three neurons are 45º, 135º, and 180º, respectively.
+            Below, each neuron's time-varying firing rate (or PSTH) in response to a stimulus θ is modeled as: 
+            <img src="static/eqns.png" height="50"/>
+            <br>The idea is that when a stimulus (θ) is shown, a neuron's firing rate gradually increases from spontaneous firing (r_spont) to evoked firing (r_evoked). Above, f_τ(t) is a gain signal that ramps up from 0 to 1, so that τ controls how quickly the firing rate responds to the stimulus. Each neuron has a generic response to the presence of a stimulus (r_generic), regardless of which stimulus it is. The other component of the neuron's response is cosine-tuned, where the preferred stimulus (θ_pref) for each of three neurons is 45º, 135º, and 180º, respectively.
           </p>
         </div>
         <!-- r(t, \theta \mid \theta_{pref}) = \left[ r_{spont} +  f(t, \tau)\left(r_{evoked} + r_{stim} \cos(\theta - \theta_{\mbox{pref}})\right) \right]^+ -->
+        <!-- r(t, \theta) = \left[ r_{spont} +  f_\tau(t) r_{evoked}(\theta) \right]^+\\
+r_{evoked}(\theta) = r_{generic} + r_{stim} \cos(\theta - \theta_{pref}) -->
       	<div class="container">
         <div class="row">
     			<div class="btn-toolbar" role="toolbar" aria-label="button groups">
@@ -90,7 +92,7 @@
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
                     <div class="slider-container">
-                    r_evoked <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci">
+                    r_generic <input type="range" min="0" max="9" value="0" class="slider" id="slider-ci">
                     </div>
                 </div>
                 <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
