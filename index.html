@@ -90,11 +90,6 @@ r_{evoked}(t, \theta) &= g_{\tau_1}(t)*r_{generic} + g_{\tau_2}(t)*r_{stim}*\cos
           <div class="col-md-12">
           <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
             <div class="slider-container">
-                Viewing PSTH<br>for: <span id="value-stim-index"></span><input type="range" min="0" max="7" value="0" class="slider" id="slider-stim-index">
-            </div>
-          </div>
-          <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
-            <div class="slider-container">
                 Neuron 1<br>θ_pref: <span id="value-thetapref-1"></span><input type="range" min="0" max="7" value="0" class="slider" id="slider-thetapref-1">
             </div>
           </div>
@@ -132,6 +127,11 @@ r_{evoked}(t, \theta) &= g_{\tau_1}(t)*r_{generic} + g_{\tau_2}(t)*r_{stim}*\cos
               <div class="slider-container">
               Stimulus time const.<br>(τ_2): <span id="value-tau-stim"></span><input type="range" min="1" max="12" value="1" class="slider" id="slider-tau">
               </div>
+          </div>
+          <div class="btn-group mr-2 btn-slider" role="group" aria-label="Second group">
+            <div class="slider-container">
+                Viewing PSTH<br>for: <span id="value-stim-index"></span><input type="range" min="0" max="7" value="0" class="slider" id="slider-stim-index">
+            </div>
           </div>
           <div class="btn-group mr-2" role="group" aria-label="Third group">
               <button type="button" class="btn btn-preset btn-outline-secondary snowflake">Snowflake</button>
