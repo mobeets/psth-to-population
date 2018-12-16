@@ -4,7 +4,10 @@ var stimuli = [];
 var nStimuli = 8;
 var nTimesteps = 15;
 var lines = [];
-var layout = [];
+var graph_layout = [];
+var update = [];
+var psth_layout = [];
+var stimIndexForPsth = 0;
 
 // NEURONS
 // global parameters:
@@ -40,6 +43,47 @@ function rad2deg(rad) {
   return Math.ceil(rad*180/Math.PI);
 }
 
+function gatherPsths(xs, ys, zs, ts) {
+  var psth1 = {
+    name: 'Neuron 1',
+    type: 'scatter', 
+    mode: 'lines+markers',
+    x: ts,
+    y: xs,
+    opacity: 1,
+    line: { width: 3,
+      reversescale: false,
+      color: 'rgb(35, 35, 35)' },
+    marker: {size: 5}
+  };
+  var psth2 = {
+    name: 'Neuron 2',
+    type: 'scatter', 
+    mode: 'lines+markers',
+    x: ts,
+    y: ys,
+    opacity: 1,
+    line: { width: 3,
+      reversescale: false,
+      color: 'rgb(135, 135, 135)' },
+    marker: {size: 5}
+  };
+  var psth3 = {
+    name: 'Neuron 3',
+    type: 'scatter', 
+    mode: 'lines+markers',
+    x: ts,
+    y: zs,
+    opacity: 1,
+    line: { width: 3,
+      reversescale: false,
+      color: 'rgb(205, 205, 205)' },
+    marker: {size: 5}
+  };
+  return {psth_lines: [psth1, psth2, psth3],
+    psth_update: {y: [xs, ys, zs]}};
+}
+
 function make3Psths(stimuli, nTimesteps, returnLines) {
   var sx = Math.PI/4;
   var sy = 3*Math.PI/4;
@@ -48,20 +92,23 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
   var xss = [];
   var yss = [];
   var zss = [];
+  var tss = [];
   for (var j=0; j<stimuli.length; j++) {
     var stim = stimuli[j];
     var xs = [];
     var ys = [];
     var zs = [];
+    var ts = [];
     for (var t=0; t<nTimesteps; t++) {
       xs.push(psth(t,stim,sx,g,tuningFcn));
       ys.push(psth(t,stim,sy,g,tuningFcn));
       zs.push(psth(t,stim,sz,g,tuningFcn));
+      ts.push(t);
     }
     var cdata = {
       name: rad2deg(stim).toString() + 'º',
       type: 'scatter3d',
-      mode: 'lines',
+      mode: 'lines+markers',
       x: xs,
       y: ys,
       z: zs,
@@ -70,15 +117,47 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
         width: 6,
         // color: c,
         reversescale: false
-      }
+      },
+      marker: {size: 3}
     };
+    if (j === stimIndexForPsth) {
+      var psth_obj = gatherPsths(xs, ys, zs, ts);
+    }
     xss.push(xs);
     yss.push(ys);
     zss.push(zs);
+    tss.push(ts);
     lines.push(cdata);
   }
-  if (returnLines) { return lines; } else {
-    return {x: xss, y: yss, z: zss}; }
+  return {graph_lines: lines,
+    psth_lines: psth_obj.psth_lines,
+    psth_update: psth_obj.psth_update,
+    graph_update: {x: xss, y: yss, z: zss}};
+}
+
+function updateGraphs() {
+  var newdata = make3Psths(stimuli, nTimesteps);
+  Plotly.update('graph', newdata.graph_update);
+  Plotly.update('psths', newdata.psth_update);
+}
+
+function createGraphs() {
+  var curdata = make3Psths(stimuli, nTimesteps);
+  graph_layout = {
+    scene: {
+      xaxis: {title: 'Neuron 1'},
+      yaxis: {title: 'Neuron 2'},
+      zaxis: {title: 'Neuron 3'}
+    },
+    height: 640,
+  };
+  psth_layout = {
+    title: 'PSTHs for ' + rad2deg(stimuli[stimIndexForPsth]).toString() + 'º',
+    xaxis: {title: 'Time (t)'},
+    yaxis: {title: 'Firing rate (r)'}
+  };
+  Plotly.plot('graph', curdata.graph_lines, graph_layout);
+  Plotly.plot('psths', curdata.psth_lines, psth_layout);
 }
 
 function makeStimuli(nStimuli) {
@@ -91,23 +170,23 @@ function makeStimuli(nStimuli) {
 
 function changeA() {
   a = parseInt($("#slider-a").val());
-  updateGraph();
+  updateGraphs();
 }
 function changeB() {
   b = parseInt($("#slider-b").val());
-  updateGraph();
+  updateGraphs();
 }
 function changeTau() {
-  tau = parseInt($("#slider-tau").val());
-  updateGraph();
+  tau = parseFloat($("#slider-tau").val())/2.0;
+  updateGraphs();
 }
 function changeCiRate() {
   ciRate = parseInt($("#slider-ci").val());
-  updateGraph();
+  updateGraphs();
 }
 function changeCiTau() {
-  ciTau = parseInt($("#slider-ci-tau").val());
-  updateGraph();
+  ciTau = parseFloat($("#slider-ci-tau").val())/2.0;
+  updateGraphs();
 }
 function addHandlers() {
   $("#slider-a").click(changeA);
@@ -115,37 +194,12 @@ function addHandlers() {
   $("#slider-tau").click(changeTau);
   $("#slider-ci").click(changeCiRate);
   $("#slider-ci-tau").click(changeCiTau);
-  $("#make-psths").click(updateGraph);
-}
-
-function updateGraph() {
-  console.log([a,b,tau]);
-  var update = make3Psths(stimuli, nTimesteps, false);
-  console.log(update);
-  // Plotly.redraw('graph');
-  Plotly.update('graph', update);
-  // Plotly.restyle('graph', lines);
-}
-
-function createGraph() {
-  lines = make3Psths(stimuli, nTimesteps, true);
-  layout = {
-    scene: {
-      xaxis: {title: 'Neuron 1'},
-      yaxis: {title: 'Neuron 2'},
-      zaxis: {title: 'Neuron 3'}
-    },
-    height: 640,
-  };
-  console.log(lines);
-  Plotly.plot('graph', lines, layout);
 }
 
 function main() {
   makeStimuli(nStimuli);
-  console.log(stimuli);
   addHandlers();
-  createGraph();
+  createGraphs();
 }
 
 $(document).ready(main);
