@@ -8,6 +8,7 @@ var graph_layout = [];
 var update = [];
 var psth_layout = [];
 var stimIndexForPsth = 0;
+var curgraph;
 
 // NEURONS
 // global parameters:
@@ -178,16 +179,18 @@ function make3Psths(stimuli, nTimesteps, returnLines) {
 }
 
 function updateGraphs() {
-  var newdata = make3Psths(stimuli, nTimesteps);
-  Plotly.update('graph', newdata.graph_update, newdata.graph_layout);
-  Plotly.update('psths', newdata.psth_update, newdata.psth_layout);
+  var camera_eye = curgraph.graph_layout.scene.camera.eye;
+  curgraph = make3Psths(stimuli, nTimesteps);
+  curgraph.graph_layout.scene.camera.eye = camera_eye;
+  Plotly.update('graph', curgraph.graph_update, curgraph.graph_layout);
+  Plotly.update('psths', curgraph.psth_update, curgraph.psth_layout);
   updateSliderValues();
 }
 
 function createGraphs() {
-  var curdata = make3Psths(stimuli, nTimesteps);
-  Plotly.plot('graph', curdata.graph_lines, curdata.graph_layout);
-  Plotly.plot('psths', curdata.psth_lines, curdata.psth_layout);
+  curgraph = make3Psths(stimuli, nTimesteps);
+  Plotly.plot('graph', curgraph.graph_lines, curgraph.graph_layout);
+  Plotly.plot('psths', curgraph.psth_lines, curgraph.psth_layout);
 }
 
 function makeStimuli(nStimuli) {
